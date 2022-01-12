@@ -1,4 +1,4 @@
-from dashboard_tool import loader
+from dashboard_tool import dashboard_loader
 from dashboard_tool import dashboard_editor
 from dashboard_tool import panel_editor
 from dashboard_tool import writer
@@ -8,7 +8,7 @@ if __name__ == '__main__':
 
     path = "D:\workspace\docker-workspace\Grafana-Dashboard-Config\Operation\provisioning\dashboards\swagger"
 
-    dashboard_loader = loader.DashBoardLoader(path)
+    dashboard_loader = dashboard_loader.DashBoardLoader(path)
 
     dict = dashboard_loader.collect_dashboard_json_dict()
 
