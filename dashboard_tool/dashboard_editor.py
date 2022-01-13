@@ -6,7 +6,8 @@ def replace_string(dashboard_json: json, old_variable: str, new_variable: str, f
     fo = functional(old_variable)
     fn = functional(new_variable)
     json_string = json_string.replace(fo, fn)
-    return json.loads(json_string)
+    dashboard_json = json.loads(json_string)
+    return dashboard_json
 
 
 def edit_title(dashboard_json: json, functional):

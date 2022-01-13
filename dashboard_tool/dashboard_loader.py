@@ -1,4 +1,5 @@
-from pathlib import Path
+from os import walk
+from os.path import join
 import json
 
 
@@ -8,8 +9,12 @@ class DashBoardLoader:
         self.path = path
 
     def collect_dashboard_path_list(self) -> list:
-        paths = Path(self.path).glob('**/*')
-        return [path for path in paths if path.is_file()]
+        paths = []
+        for root, dirs, files in walk(self.path):
+            for f in files:
+                paths.append(join(root, f))           
+        return paths
+
 
     def collect_dashboard_json_dict(self) -> dict:
         paths = self.collect_dashboard_path_list()
