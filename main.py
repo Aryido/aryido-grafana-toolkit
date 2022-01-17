@@ -1,4 +1,6 @@
 import pathlib
+import requests
+import json
 from dashboard_tool import dashboard_loader
 from dashboard_tool import dashboard_editor
 from dashboard_tool import panel_editor
@@ -8,11 +10,10 @@ from api_tool import datasource_api
 
 if __name__ == '__main__':
 
-    url = "http://localhost:3000/grafana/api/datasources"
-    api_key="eyJrIjoiaHZFc0VPYkZxUFltZWJldHRZRTZvaTJ3MHNPY2pXR2oiLCJuIjoiZ3JhZmFuYS1weXRob24tdG9vbGtpdCIsImlkIjoxfQ=="
+    api_key="eyJrIjoiOWduMGtIb0tLVzdSNlJVeTVFMllkVmY3WGc4QTJVS3AiLCJuIjoiZ3JhZmFuYS1weXRob24tdG9vbGtpdCIsImlkIjoxfQ=="
+    
     datasource_api = datasource_api.DataSourceApi("http://localhost:3000/grafana" , api_key)
     datasource_list = datasource_api.find_all_datasource()
-
     list = []
     for datasource in datasource_list:
         obj = {
@@ -21,17 +22,17 @@ if __name__ == '__main__':
         }
         list.append(obj)
     
-    print(list)
+    #print(list)
 
 
     path = "D:\\workspace\\docker-workspace\\Grafana-Dashboard-Config\\Operation\\provisioning\\dashboards\\swagger"
     #path = "D:\\workspace\\docker-workspace\\Grafana-Dashboard-Config\\Operation\\provisioning\\dashboards\\swagger\\fews-dataset\\simulated"
 
-    # dashboard_loader = dashboard_loader.DashBoardLoader(path)
+    dashboard_loader = dashboard_loader.DashBoardLoader(path)
 
-    # dict = dashboard_loader.collect_dashboard_json_dict()
+    dict = dashboard_loader.collect_dashboard_json_dict()
     
-    # for (path, dashboard_json) in dict.items():
+    for (p, dashboard_json) in dict.items():
         # dashboard_json = dashboard_editor.edit_title(
         #     dashboard_json,
         #     lambda title: "FEWS " + title
@@ -58,10 +59,20 @@ if __name__ == '__main__':
         # )
 
         # writer.write(path, dashboard_json)
+       
+        dashboard_json.pop("id")
+        datadb = {
+                "dashboard": dashboard_json,
+                }
+        response=requests.post("http://localhost:3000/grafana/api/dashboards/import", json = datadb, headers={
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        'Authorization': "Bearer eyJrIjoiOWduMGtIb0tLVzdSNlJVeTVFMllkVmY3WGc4QTJVS3AiLCJuIjoiZ3JhZmFuYS1weXRob24tdG9vbGtpdCIsImlkIjoxfQ=="
+        })
+        print(response)
+       
 
-    
-    
-    # response  = requests.get(url, headers={
+    # response  = requests.get("http://localhost:3000/grafana/api/datasources", headers={
     #     "Accept": "application/json",
     #     "Content-Type": "application/json",
     #     'Authorization': api_key
