@@ -19,6 +19,5 @@ class FolderApi(BaseApi):
         json_data = dict(title=title)
         if uid is not None:
             json_data["uid"] = uid
-        response = requests.post(
-            url, json=json_data, headers=self.generate_header())
+        response = requests.post(url, json=json_data, headers=self.generate_header())
         return json.loads(response.text)

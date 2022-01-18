@@ -11,28 +11,41 @@ class DashboardApi(BaseApi):
         base_url = self.base_url
         url = base_url + "/api/dashboards/uid/{0}".format(uid)
         response = requests.get(url, headers=self.generate_header())
+        if response.status_code == 404 and response.reason == "Not Found":
+            return None   
         return json.loads(response.text)
+       
 
-    def create_dashboard(self, dashboard_json):
-        search_dashboard_json = self.find_dashboard(dashboard_json["uid"])
+    def create_dashboard(self, dashboard_json, folderId=None, folderUid=None):
+        uid = dashboard_json["uid"]
+        search_dashboard_json = self.find_dashboard(uid)
         if search_dashboard_json is None:
-            dashboard_json.pop("uid")
+            dashboard_json.pop("id")
+            data = {
+                "dashboard": dashboard_json,
+            }
+            if folderId is not None and folderUid is not None:
+                data["folderId"] = folderId
+                data["folderUid"] = folderUid
+
             base_url = self.base_url
             url = base_url + "/api/dashboards/import"
-            response = requests.post(
-                url, json=dashboard_json, headers=self.generate_header())
+
+            response = requests.post(url, json=data, headers=self.generate_header())
             return json.loads(response.text)
         else:
-            raise Exception("exist {0} dashboard...".format(
-                dashboard_json["uid"]))
+            raise Exception(f"exist {uid} dashboard...")
 
     def update_dashboard(self, dashboard_json):
-        search_dashboard_json = self.find_dashboard(dashboard_json["uid"])
+        uid = dashboard_json["uid"]
+        search_dashboard_json = self.find_dashboard(uid)
         if search_dashboard_json is not None:
+            data = {
+                "dashboard": dashboard_json,
+            }
             base_url = self.base_url
             url = base_url + "/api/dashboards/db"
-            response = requests.post(
-                url, json=dashboard_json, headers=self.generate_header())
+            response = requests.post(url, json=data, headers=self.generate_header())
             return json.loads(response.text)
         else:
-            raise Exception("not find dashboard...")
+            raise Exception(f"not find dashboard {uid}...")

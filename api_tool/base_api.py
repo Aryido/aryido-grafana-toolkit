@@ -4,8 +4,9 @@ class BaseApi:
         self.token = token
 
     def generate_header(self):
+        token = self.token
         return {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            'Authorization': "Bearer {0}".format(self.token)
+            'Authorization': f"Bearer {token}"
         }
