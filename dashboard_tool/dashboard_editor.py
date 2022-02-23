@@ -17,8 +17,7 @@ def edit_title(dashboard_json: json, functional):
 
 
 def edit_variable(dashboard_json: json, old_variable: str, new_variable: str, functional) -> json:
-    dashboard_json = __edit_templating_variable(
-        dashboard_json, old_variable, new_variable)
+    dashboard_json = __edit_templating_variable(dashboard_json, old_variable, new_variable)
     return replace_string(dashboard_json, old_variable, new_variable, functional)
 
 
@@ -27,4 +26,9 @@ def __edit_templating_variable(dashboard_json: json, old_variable: str, new_vari
     for variable in variableList:
         if variable["name"] == old_variable:
             variable["name"] = new_variable
+    return dashboard_json
+
+def create_variable(dashboard_json: json, new_variable: json) -> json:
+    variableList = dashboard_json["templating"]["list"]
+    variableList.append(new_variable)
     return dashboard_json
