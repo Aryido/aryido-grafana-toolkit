@@ -3,7 +3,7 @@ from api_tool import dashboard_api
 from api_tool import folder_api
 
 if __name__ == '__main__':
-    api_key = "eyJrIjoiREJNeTR4WURPdTFMMUdHQThCSjBObmREc0pZd1VZRnMiLCJuIjoidXBMb2FkRGFzaEJvYXJkIiwiaWQiOjF9"
+    api_key = "eyJrIjoiOHVaN0djQW04MXhsbUxLcU91YnFPWXlkM281ajAzM3kiLCJuIjoidXBMb2FkRGFzaEJvYXJkIiwiaWQiOjF9"
     dashboard_api = dashboard_api.DashboardApi("http://localhost:3000/grafana", api_key)
     folder_api = folder_api.FolderApi("http://localhost:3000/grafana", api_key)
 
